@@ -1,0 +1,14 @@
+
+  <table border=0 cellpadding=0 cellspacing=0 height=495><tr><td VALIGN=TOP>
+<br><br><font size=+1>New Haven Center for Economic Interpretation</font><br>
+37 Howe Street<br>
+New Haven, Connecticut
+<br><br>
+203.887.9124
+<br><br><br>
+<a HREF="mailto:nhcei@xrgb.com">nhcei@xrgb.com</a>
+     </td></tr>
+     <tr><td VALIGN=BOTTOM><font size=-1>
+Photographs courtesy of <A HREF="http://www.gatm.com/cthwys/index.html" TARGET="_blank"><span style="text-decoration: underline;">Greg Amy</span></A><BR>
+Website design courtesy of <A HREF="http://www.xrgb.com" TARGET="_blank"><span style="text-decoration: underline;">xRGB.com</span></A></font>
+  </td></tr></table>
