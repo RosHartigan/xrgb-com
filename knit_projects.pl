@@ -27,10 +27,6 @@ $menu_file = $site_directory."projects_base\\project_menu.html";
 # set up the client and skills hashes
 %clients = (
  sc => ["sn_2014","tle"],
- bn => ["epub"],
- eskills => ['minimod'],
- opg => ['udbs'],
- rco=> ['mobileoffice']
  );
 
 %archive_clients = (
