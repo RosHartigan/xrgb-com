@@ -26,7 +26,7 @@ $menu_file = $site_directory."projects_base\\project_menu.html";
 
 # set up the client and skills hashes
 %clients = (
- sc => ["sn","tle"],
+ sc => ["sn_2014","tle"],
  bn => ["epub"],
  eskills => ['minimod'],
  opg => ['udbs'],
@@ -64,13 +64,13 @@ imaginova => ["sn_2006"],
  );
 %archive_skills = (
  director => ["mom","adhd","gizmos", "ips","seaquest","read180","aftts","dfi"],
- mac => ["sn_2010", "dmu", "r180_edit", "sn_2006", "ips","hypertv","tencore","sr","eschool","lmaw","aftts","lips","cuny_math"]
+ mac => ["sn_2010", "dmu", "r180_edit", "sn_2006", "ips","hypertv","tencore","sr","eschool","lmaw","aftts","lips","cuny_math"],
  cd => ["ips","lmaw","fws","aftts","dfi"],
  apps => ["ips","tencore","lmaw","fws","lips"],
  plugins => ["hypertv","eschool","aftts"],
  porting => ["maxracks_site","hypertv","sr","lmaw","dfi","cuny_math"],
  project_mgmt => ["sri_cad", "mom", "sn_2006","ips", "maxracks_site","hypertv"],
- production => ["sri_cad", "peoplemap","sn_2006","ips", "maxracks_site","hypertv"]
+ production => ["sri_cad", "peoplemap","sn_2006","ips", "maxracks_site","hypertv"],
  web => ["peoplemap", "nhcei_site", "frontline_site", "maxracks_site","fe_site"],
  scripting => ["minimod", "sri_cad", "peoplemap", "sn_2006","ips", "nhcei_site","maxracks_site","fws"],
  mysql => ["udbs", "sri_cad", "peoplemap","frontline_site", "maxracks_site"],
