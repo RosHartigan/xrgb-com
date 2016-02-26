@@ -11,12 +11,8 @@ print $site_directory."\n";
 
 $menu_file = $site_directory."projects_base\\project_menu.html";
 
-
-@index_projects = qw(maxracks_site ips seaquest fws);
-
-
-@projects = qw(sn_2010 tle peoplemap sri_cad mom sn_2006 dmu adhd nhcei_site r180_edit gizmos frontline_site ips maxracks_site fe_site seaquest hypertv tencore sr read180 eschool lmaw fws aftts);
-@projects = qw(mobileoffice udbs minimod  sn_2014 panda epub tour_forecast);
+@projects = qw(sn_2014 panda epub tour_forecast mobileoffice udbs minimod sn_2010 peoplemap sri_cad mom sn_2006 dmu adhd nhcei_site r180_edit gizmos frontline_site ips maxracks_site fe_site seaquest hypertv tencore sr read180 eschool lmaw fws aftts);
+#@projects = qw(mobileoffice udbs minimod  sn_2014 panda epub tour_forecast);
 @long_content=qw(c scripting director mac);
 @strong_names = ("Maxracks","Grassroots Technologies", "Sackler Institute for Developmental Psychobiology"); 
 @emp_names = ("MobileOffice", "UDBS-Plus", "Starry Night", "Math-O-Matic", "PeopleMap", "Gizmos");
@@ -26,7 +22,9 @@ $menu_file = $site_directory."projects_base\\project_menu.html";
 
 # set up the client and skills hashes
 %clients = (
- sc => ["sn_2014","tle"],
+ sc => ["sn_2014","tle", "sri_cad", "sn_2010"],
+ scholastic => ["dmu", "r180_edit", "ips"],
+ all => \@projects
  );
 
 %archive_clients = (
@@ -52,13 +50,14 @@ imaginova => ["sn_2006"],
 );
 %skills = (
  ios => ["mobileoffice", "minimod"],
- c => [ "sn_2014","mobileoffice", "minimod", "udbs", "dmu", "r180_edit", "sn_2006", "ips","hypertv","tencore","sr","eschool","lmaw","fws","aftts","bb","tm","lips","cuny_math"],
- java => ["panda"],
- scripting => ["tour_forecast","minimod","sri_cad"],
- mysql => ["panda","udbs", "sri_cad"],
- web => ["tour_forecast", "panda", "grd", "epub"],
+ c => [ "sn_2014","mobileoffice", "minimod", "udbs", "dmu", "r180_edit", "sn_2010", "ips"],
+ java => ["panda", "tle"],
+ scripting => ["epub","minimod","sri_cad", "ips"],
+ mysql => ["panda","udbs", "sri_cad", "peoplemap"],
+ web => ["tour_forecast", "panda", "grd", "epub", "peoplemap"],
  );
 %archive_skills = (
+c => [ "sn_2014","mobileoffice", "minimod", "udbs", "dmu", "r180_edit", "sn_2006", "ips","hypertv","tencore","sr","eschool","lmaw","fws","aftts","bb","tm","lips","cuny_math"],
  director => ["mom","adhd","gizmos", "ips","seaquest","read180","aftts","dfi"],
  mac => ["sn_2010", "dmu", "r180_edit", "sn_2006", "ips","hypertv","tencore","sr","eschool","lmaw","aftts","lips","cuny_math"],
  cd => ["ips","lmaw","fws","aftts","dfi"],
@@ -135,24 +134,28 @@ foreach $skill (keys %skills) {
 	$skill_buf = stripHTMLHeader($skill_buf);
 	#print $skill_buf."\n\n";
 	
+	my $evenOrOdd = 0;
   foreach $project (@{$skills{$skill}}) {
     #get the project blurb
-    $project_buf = tackOnProject($project);
+    $project_buf = tackOnProject($project, ($evenOrOdd % 2) == 0);
+	
 	$skill_buf = $skill_buf.$project_buf;
+	
+	$evenOrOdd++;
+	
   }
   # get the page template
 	 $menu_buf = getFileBuf($menu_file);
 	
 	# if this is a not long skill page, change the background color....
 	
-	if( $skill =~ m/c|scripting|director|mac/ ) {
-		print "changing'...".$skill."\n";
-	 	$menu_buf =~ s/id=\"container\"/id=\"container\" style=\"background\-color\:\#FAFAFA;\"/i;
-		$menu_buf =~ s/id=\"body_right\"/id=\"body_right\" style=\"background\-color\:\#FCFCFC;\"/i;
-		$menu_buf =~ s/id=\"body_left"/id=\"body_left\" style=\"border\:0;\"/i;
-		$menu_buf =~ s/id=\"content\"/id=\"content\" style=\"border\-left\:1px solid \#C0C0C0;\"/i;
-	
-	 }
+	#if( $skill =~ m/c|scripting|director|mac/ ) {
+	#	print "changing'...".$skill."\n";
+	# 	$menu_buf =~ s/id=\"container\"/id=\"container\" style=\"background\-color\:\#FAFAFA;\"/i;
+	#	$menu_buf =~ s/id=\"body_right\"/id=\"body_right\" style=\"background\-color\:\#FCFCFC;\"/i;
+	#	$menu_buf =~ s/id=\"body_left"/id=\"body_left\" style=\"border\:0;\"/i;
+	#	$menu_buf =~ s/id=\"content\"/id=\"content\" style=\"border\-left\:1px solid \#C0C0C0;\"/i;
+	# }
   #replace the ^CONTENT tag
 		$menu_buf =~ s/\^CONTENT/$skill_buf/;
 	$menu_buf =~ s/\^TITLE/$title/;
@@ -170,10 +173,12 @@ foreach $client (keys %clients) {
 	$title=extractTitle($client_buf);
 	$client_buf = stripHTMLHeader($client_buf);
     
+  my $evenOrOdd = 0;
   foreach $project (@{$clients{$client}}) {
     #get the project blurb
-	$project_buf = tackOnProject($project);
+	$project_buf = tackOnProject($project, ($evenOrOdd % 2) == 0);
 	$client_buf = $client_buf.$project_buf;   
+	$evenOrOdd++;
   }
 
   
@@ -277,26 +282,52 @@ sub extractSummary {
 	return $out_buf;
 	}
 }
+sub extractDetail {
+  $_ = shift;
+  my $out_buf = extractAbstract($_);
+  @paras = split("<p>", $out_buf);
+  if( scalar(@paras) >= 2) {
+	pop(@paras);
+	return join("<p>",@paras);
+  }else {
+	return $out_buf;
+  }
+}
 
 sub tackOnProject {
-	my $out_buf = "";
 	my $project= shift;
+	my $evenOrOdd = shift;
 	
-	$project_buf = getFileBuf($site_directory."projects_base\\".$project."_base.html");
-	$proj_title=extractTitle($project_buf);
-	$short_buf=extractSummary($project_buf);
-	$out_buf = "<p><h4 class=\"proj_hdr\">".$proj_title."</h4>\n".$short_buf;
+	my $project_buf = getFileBuf($site_directory."projects_base\\".$project."_base.html");
 	
-    my $index = first { $projects[$_] eq $project } 0 .. $#projects;
-	if( $index > 0 || $projects[0] eq $project) {
-		$out_buf = $out_buf." &nbsp; <a href=\"../projects/".$project.".html\">[<em>details...</em>]</a>";
-		print $project, " ", $index, "\n";
+	my $short_buf=extractDetail($project_buf);
+	
+	if( ($evenOrOdd % 2) == 0 ) {
+		$short_buf = "<div class='project_cell project_cell_even'>".$short_buf;
 	}
 	else {
-		print $project, " has no details\n";
+		$short_buf = "<div class='project_cell project_cell_odd'>".$short_buf;
 	}
-	$out_buf = $out_buf."</p>\n";
+
 	
-	return $out_buf;
+	return $short_buf."</div>";
+
+#	my $out_buf = "";
+#	$out_buf =$short_buf;
+
+#	my $proj_title=extractTitle($project_buf);
+#	$out_buf = "<p><h4 class=\"proj_hdr\">".$proj_title."</h4>\n";
+	
+#    my $index = first { $projects[$_] eq $project } 0 .. $#projects;
+#	if( $index > 0 || $projects[0] eq $project) {
+#		$out_buf = $out_buf." &nbsp; <a href=\"../projects/".$project.".html\">[<em>details...</em>]</a>";
+#		print $project, " ", $index, "\n";
+#	}
+#	else {
+#		print $project, " has no details\n";
+#	}
+#	$out_buf = $out_buf."</p>\n";
+	
+#	return $out_buf;
 }
 
